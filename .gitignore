@@ -1,0 +1,17 @@
+node_modules/
+dist/
+concerts.json
+npm-debug.log
+settings.json
+__pycache__
+*.pem
+aws-credentials.sh
+.DS_Store
+cloud-config
+variables.json
+*.csr
+master1-master.json
+terraform.tfstate*
+assets/
+aws-variables.sh
+quay-io-secret.yaml
