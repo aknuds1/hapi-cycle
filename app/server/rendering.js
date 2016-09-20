@@ -6,27 +6,27 @@ import Logger from '@arve.knudsen/js-logger'
 let logger = Logger.get('server.rendering')
 
 let wrapVTreeWithHtmlBoilerplate = ([vtree, context,]) => {
-  return (
-    html([
-      head([
-        title('Cycle Isomorphism Example'),
-      ]),
-      body([
-        div('.app-container', [vtree,]),
-        script(`window.appContext = ${serialize(context)};`),
-        // script(clientBundle),
-      ]),
-    ])
-  );
+  return html([
+    head([
+      title('Cycle Isomorphism Example'),
+    ]),
+    body([
+      div('.app-container', [vtree,]),
+      script(`window.appContext = ${serialize(context)};`),
+      // script(clientBundle),
+    ]),
+  ])
 }
 
 let main = (sources) => {
-  let vtree = (
-    section('.home', [
-      h1('The homepage'),
-      p('Welcome to our spectacular web page with nothing special here.'),
-    ])
-  )
+  let vtree = sources.context.map(({}) => {
+     return (
+      section('.home', [
+        h1('The homepage'),
+        p('Welcome to our spectacular web page with nothing special here.'),
+      ])
+    )
+  })
   return {
     DOM: vtree,
   }
@@ -45,6 +45,7 @@ let renderIndex = (request, reply) => {
   }, {
     DOM: makeHTMLDriver((html) => {
       let wrappedHtml = `<!doctype html>${html}`
+      reply(html)
     }),
     context: () => {return context},
     PreventDefault: () => {},
