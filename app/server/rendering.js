@@ -19,23 +19,18 @@ let wrapVTreeWithHtmlBoilerplate = ([vtree, context,]) => {
 }
 
 let main = (sources) => {
-  let vtree = sources.context.map(({}) => {
-     return (
-      section('.home', [
-        h1('The homepage'),
-        p('Welcome to our spectacular web page with nothing special here.'),
-      ])
-    )
+  return sources.context.map(({}) => {
+    return section('.home', [
+      h1('The homepage'),
+      p('Welcome to our spectacular web page with nothing special here.'),
+    ])
   })
-  return {
-    DOM: vtree,
-  }
 }
 
 let renderIndex = (request, reply) => {
   let context = xs.of({})
   Cycle.run((sources) => {
-    let vtree = main(sources).DOM
+    let vtree = main(sources)
     let wrappedVTree = xs.combine(vtree, context)
       .map(wrapVTreeWithHtmlBoilerplate)
       .last()
