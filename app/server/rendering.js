@@ -1,36 +1,29 @@
 import Cycle from '@cycle/xstream-run'
 import xs from 'xstream'
-import {html, section, h1, p, head, title, body, div, script, makeHTMLDriver,} from '@cycle/dom'
+import {makeHTMLDriver, h,} from '@cycle/dom'
 import serialize from 'serialize-javascript'
 import Logger from '@arve.knudsen/js-logger'
 let logger = Logger.get('server.rendering')
 
+import app from '../components/app'
+
 let wrapVTreeWithHtmlBoilerplate = ([vtree, context,]) => {
-  return html([
-    head([
-      title('Cycle Isomorphism Example'),
+  return h('html', [
+    h('head', [
+      h('title', 'Cycle Isomorphism Example'),
     ]),
-    body([
-      div('.app-container', [vtree,]),
-      script(`window.appContext = ${serialize(context)};`),
-      // script(clientBundle),
+    h('body', [
+      h('.app-container', [vtree,]),
+      h('script', `window.appContext = ${serialize(context)};`),
+      h('script', {attrs: {src: '/bundle.js',},}),
     ]),
   ])
-}
-
-let main = (sources) => {
-  return sources.context.map(({}) => {
-    return section('.home', [
-      h1('The homepage'),
-      p('Welcome to our spectacular web page with nothing special here.'),
-    ])
-  })
 }
 
 let renderIndex = (request, reply) => {
   let context = xs.of({})
   Cycle.run((sources) => {
-    let vtree = main(sources)
+    let vtree = app(sources).DOM
     let wrappedVTree = xs.combine(vtree, context)
       .map(wrapVTreeWithHtmlBoilerplate)
       .last()
