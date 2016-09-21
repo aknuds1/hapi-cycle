@@ -1,5 +1,3 @@
-global.__IS_BROWSER__ = false
-
 import Hapi from 'hapi'
 import R from 'ramda'
 import path from 'path'

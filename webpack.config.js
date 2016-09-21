@@ -1,7 +1,9 @@
 let webpack = require('webpack')
 
 var definePlugin = new webpack.DefinePlugin({
-  __IS_BROWSER__: true,
+  'process.env': {
+    IS_BROWSER: true,
+  },
 })
 
 module.exports = {
@@ -40,7 +42,6 @@ module.exports = {
     ],
   },
   debug: true,
-  devtool: 'cheap-module-eval-source-map',
   resolve: {
     root: ['/',],
     modulesDirectories: ['node_modules', 'lib',],
@@ -49,7 +50,7 @@ module.exports = {
   devServer: {
     historyApiFallback: false,
     proxy: {
-      '*': 'http://localhost:8000',
+      '**': 'http://localhost:8000',
     },
   },
   plugins: [definePlugin,],
